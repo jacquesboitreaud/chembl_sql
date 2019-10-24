@@ -17,7 +17,7 @@ connection, cursor = reach_chembl()
 # 2 / Try requesting some bioactivities 
 # Retrieve compound activity details for a target
 """
-target = 'CHEMBL1824'
+target = 'CHEMBL240'
 result = get_target_act(cursor, target)
 
 print(f"{len(result)} bioactivities found for target {target}")
@@ -25,6 +25,10 @@ print(f"{len(result)} bioactivities found for target {target}")
 
 result = get_targets_list(cursor)
 print(f"{len(result)} protein targets found")
-    
+
 # 3 / Close connection to database 
 close(connection, cursor)
+
+for t in result:
+    if('Beta-glucocerebrosidase' in t[1]):
+        print(t)

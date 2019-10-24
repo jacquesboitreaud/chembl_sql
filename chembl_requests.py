@@ -6,6 +6,13 @@ Created on Fri Oct 18 16:24:33 2019
 
 Functions to request specific data in CHEMBL database
 
+TODO : get CHEMBL ID of all DUD targets 
+Select all DUD targets and get IC50 data. 
+
+Autoencoder on DUD. 
+
+MUV as test set. 
+
 """
 
 def get_target_act(cursor, target_id):
@@ -46,6 +53,7 @@ def get_targets_list(cursor):
     
     cursor.execute(f"""SELECT t.chembl_id AS target_chembl_id,
     t.pref_name        AS target_name,
+    t.tid,
     t.target_type,
     c.accession        AS protein_accession,
     c.sequence         AS protein_sequence
