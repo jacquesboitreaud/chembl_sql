@@ -11,7 +11,8 @@ from rdkit import Chem
 from rdkit.Chem import Draw, QED, Crippen, Descriptors, rdMolDescriptors, GraphDescriptors
 import pandas as pd
 
-DUD = pd.read_csv('/home/mcb/jboitr/data/DUD_dataframe.csv')
+#DUD = pd.read_csv('/home/mcb/jboitr/data/DUD_dataframe.csv')
+DUD = pd.read_csv('C:/Users/jacqu/Documents/data/DUD_dataframe.csv', nrows=1000)
 
 smiles = list(DUD['can'])
 d={}
@@ -19,15 +20,14 @@ prop_names=['QED','logP','molWt','maxCharge','minCharge','valence','TPSA','HBA',
 for name in prop_names : 
     d[f'{name}']=[]
 
-cpt=0
 
-for s in smiles : 
-    cpt+=1
-    if(cpt%10000==0):
-        print(cpt)
+for i,s in enumerate(smiles) : 
+    if(i%10000==0):
+        print(i)
     m=Chem.MolFromSmiles(s)
-    if(m==None):
-        print(s, cpt)
+    if(m==None or 'i' in s or '.' in s):
+        DUD=DUD.drop(i)
+        print(s, i)
     else:
         d['QED'].append(QED.default(m))
         d['logP'].append(Crippen.MolLogP(m))
@@ -40,8 +40,9 @@ for s in smiles :
         d['HBD'].append(rdMolDescriptors.CalcNumHBD(m))
         d['jIndex'].append(GraphDescriptors.BalabanJ(m))
     
-df = pd.DataFrame.from_dict(d, index = DUD.index)
+df = pd.DataFrame.from_dict(d)
 
-df_merge = pd.merge(df, DUD, on=index)
+df_merge = pd.merge(df, DUD, on=df.index)
 
-df_merge.to_csv('/home/mcb/jboitr/data/DUD_full.csv')
+#df_merge.to_csv('/home/mcb/jboitr/data/DUD_full.csv')
+df_merge.to_csv('C:/Users/jacqu/Documents/data/DUD_full.csv')
